@@ -27,15 +27,6 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
-      - name: Verify build requirements exist
-        shell: pwsh
-        run: |
-          if (-not (Test-Path "requirements-build.txt")) {
-            Write-Error "requirements-build.txt is missing from the checked-out commit."
-            Get-ChildItem -Force
-            exit 1
-          }
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
