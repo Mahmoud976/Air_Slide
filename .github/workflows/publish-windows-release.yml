@@ -1,0 +1,75 @@
+name: Publish Windows Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Release version tag (for example v1.0.0)"
+        required: true
+        default: "v1.0.0"
+        type: string
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && 'main' || github.ref }}
+
+      - name: Set release tag
+        id: release
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $tag = "${{ inputs.tag_name }}"
+          } else {
+            $tag = "${{ github.ref_name }}"
+          }
+          if ($tag -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+$') {
+            throw "Use a version tag like v1.0.0"
+          }
+          "tag_name=$tag" >> $env:GITHUB_OUTPUT
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Verify checked-out files
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "requirements.txt")) { throw "requirements.txt is missing." }
+          if (-not (Test-Path "airslide.py")) { throw "airslide.py is missing." }
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller==6.11.1
+
+      - name: Verify imports
+        run: |
+          python -c "import cv2, mediapipe, numpy, pyautogui; print('Core imports OK')"
+          python -m PyInstaller --version
+
+      - name: Build single-file application
+        run: |
+          python -m PyInstaller --noconfirm --clean --onefile --windowed --name AirSlide --collect-all mediapipe --collect-all cv2 --collect-all numpy --collect-all pyautogui airslide.py
+
+      - name: Publish GitHub Release and attach EXE
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          $tag = "${{ steps.release.outputs.tag_name }}"
+          gh release create $tag "dist/AirSlide.exe" --repo "${{ github.repository }}" --title "AirSlide $tag" --generate-notes
