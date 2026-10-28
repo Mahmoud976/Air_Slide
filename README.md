@@ -4,7 +4,11 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&height=220&color=0:0F172A,50:155E75,100:22D3EE&text=AirSlide&fontColor=FFFFFF&fontSize=70&fontAlignY=38&desc=Hands-free%20presentation%20control&descAlignY=60&descSize=17&animation=fadeIn" width="100%" alt="AirSlide animated header" />
 </p>
 
-<p align="center"><strong>Control your presentation with hand gestures using Python and computer vision.</strong></p>
+<p align="center">
+  <a href="https://readme-typing-svg.demolab.com">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=19&pause=900&color=22D3EE&center=true&vCenter=true&width=850&lines=Control+your+presentation+with+hand+gestures+using+Python+and+computer+vision." alt="Control your presentation with hand gestures using Python and computer vision." />
+  </a>
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.11" />
@@ -153,9 +157,19 @@ Run a test script from the project directory, for example:
 
 Suggestions, bug reports, and pull requests are welcome. For a useful bug report, include your operating system, Python version, webcam setup, and steps to reproduce the issue.
 
+## Author
+
+**Mahmoud Mohammed El Sayed Saleh**
+
+<p align="left">
+  <a href="https://www.linkedin.com/in/mahmoud-m-saleh/">
+    <img src="https://img.shields.io/badge/LinkedIn-Connect%20with%20Mahmoud-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="Connect with Mahmoud on LinkedIn" />
+  </a>
+</p>
+
 ## License
 
-No license file has been added yet. Add a license before explicitly permitting reuse or redistribution.
+This project is licensed under the [MIT License](LICENSE).
 
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?type=rect&height=90&color=0:22D3EE,50:155E75,100:0F172A&section=footer&animation=fadeIn" width="100%" alt="Animated footer" />
