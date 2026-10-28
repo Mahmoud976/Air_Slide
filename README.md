@@ -37,8 +37,9 @@ The goal is to make presenting more natural when a physical clicker is unavailab
 - **Gesture-based pause and resume:** make a fist to pause control; show an open palm to resume.
 - **Real-time hand landmarks:** MediaPipe detects and tracks hand points.
 - **Visual status overlay:** see whether the controller is ready, paused, or navigating.
-- **Gesture stability check:** waits for a gesture to remain consistent before switching modes.
-- **Movement threshold and cooldown:** helps reduce accidental repeated slide changes.
+- **Responsive movement detection:** uses a short median-smoothed wrist position instead of waiting for a long movement window.
+- **One movement, one key press:** resets the movement anchor after each slide action to reduce missed gestures and repeated triggers.
+- **Gesture stability check and cooldown:** filters noisy gesture changes while keeping slide navigation responsive.
 - **Safety stop:** press Q or Esc to exit; PyAutoGUI's fail-safe remains enabled.
 
 ## How it works
@@ -47,8 +48,9 @@ The goal is to make presenting more natural when a physical clicker is unavailab
 2. **Track:** MediaPipe Hands detects landmarks for one hand.
 3. **Recognize:** AirSlide estimates whether the hand is open, closed, or another gesture.
 4. **Check stability:** the gesture must remain consistent before it changes the controller mode.
-5. **Measure movement:** horizontal wrist movement is compared with a configurable threshold.
-6. **Control slides:** PyAutoGUI sends the left or right arrow key to the focused presentation.
+5. **Smooth movement:** a short rolling median reduces wrist-tracking jitter.
+6. **Detect a slide gesture:** movement is measured from the current anchor; after a key press, the anchor resets so a held position does not repeatedly trigger.
+7. **Control slides:** PyAutoGUI sends the left or right arrow key to the focused presentation.
 
 ## Gesture controls
 
@@ -141,11 +143,11 @@ The main settings are near the top of airslide.py:
 | Setting | Default | Purpose |
 |---|---:|---|
 | CAMERA_INDEX | 0 | Webcam device index |
-| COOLDOWN | 1.2 seconds | Minimum time between slide actions |
-| MOVEMENT_THRESHOLD | 0.12 | Horizontal movement needed to trigger navigation |
-| CALIBRATION_FRAMES | 8 frames | Number of tracked positions used to evaluate movement |
+| COOLDOWN | 0.65 seconds | Minimum time between slide actions |
+| MOVEMENT_THRESHOLD | 0.075 | Normalized horizontal movement needed to trigger navigation |
+| SMOOTHING_FRAMES | 5 frames | Short median window used to reduce tracking jitter |
 
-If your webcam is not the default camera, try changing CAMERA_INDEX. Adjust movement sensitivity gradually: a smaller threshold is more sensitive, while a larger one requires a bigger movement.
+If your webcam is not the default camera, try changing CAMERA_INDEX. If slides still do not change reliably, lower MOVEMENT_THRESHOLD slightly (for example, to 0.06); if accidental changes occur, raise it (for example, to 0.09). Use deliberate horizontal movements and keep your open palm visible to the camera.
 
 ## Development and test scripts
 
