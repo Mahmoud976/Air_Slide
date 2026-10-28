@@ -109,6 +109,29 @@ The goal is to make presenting more natural when a physical clicker is unavailab
 
 A webcam window named **AirSlide Controller** should appear. Use an open palm to enable control, move horizontally to navigate, and press Q or Esc to exit.
 
+## Build a Windows EXE
+
+You can build a single-file Windows executable locally or download one from GitHub Actions.
+
+### Option A: Build locally on Windows
+
+1. Install Python 3.11 and Git.
+2. Clone the repository and open its folder.
+3. Double-click `build_exe.bat`.
+4. When the build finishes, find `dist\AirSlide.exe`.
+
+The first build needs an internet connection to install the Python dependencies. The executable bundles OpenCV and MediaPipe, so it may be large and can take longer to start than running the Python script. Windows Defender or other security software may inspect a newly built executable.
+
+### Option B: Download the build from GitHub
+
+1. Open the repository's **Actions** tab.
+2. Select **Build Windows EXE** and open a successful run.
+3. Under **Artifacts**, download `AirSlide-Windows` and extract the ZIP.
+
+The workflow artifact is temporary and is retained for 14 days. It is a build artifact, not a permanent GitHub Release.
+
+**Important:** The EXE build has not been verified on your specific PC yet. Test it with a webcam and a test PowerPoint presentation before using it live. Keep PowerPoint focused because AirSlide sends keyboard input to the active window.
+
 ## Configuration
 
 The main settings are near the top of airslide.py:
