@@ -9,8 +9,6 @@ on:
         default: "v1.0.0"
         type: string
   push:
-    branches:
-      - "publish-release"
     tags:
       - "v*"
 
@@ -25,7 +23,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ (github.event_name == 'workflow_dispatch' || github.ref_type == 'branch') && 'main' || github.ref }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && 'main' || github.ref }}
 
       - name: Set release tag
         id: release
@@ -33,8 +31,6 @@ jobs:
         run: |
           if ("${{ github.event_name }}" -eq "workflow_dispatch") {
             $tag = "${{ inputs.tag_name }}"
-          } elseif ("${{ github.ref_type }}" -eq "branch") {
-            $tag = "v1.0.0"
           } else {
             $tag = "${{ github.ref_name }}"
           }
