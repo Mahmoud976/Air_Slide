@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="#features">Features</a> · <a href="#how-it-works">How it works</a> · <a href="#getting-started">Get started</a> · <a href="#windows-exe">Windows EXE</a> · <a href="#gesture-controls">Gestures</a>
+  <a href="#features">Features</a> · <a href="#how-it-works">How it works</a> · <a href="#getting-started">Get started</a> · <a href="#windows-exe">Windows EXE</a> · <a href="#gesture-controls">Gestures</a> · <a href="#configuration">Configuration</a>
 </p>
 
 ---
@@ -113,28 +113,30 @@ A webcam window named **AirSlide Controller** should appear. Use an open palm to
 
 ## Windows EXE
 
-**A Windows single-file executable is now built successfully by GitHub Actions.** You can download it without installing Python or the project dependencies.
+**AirSlide can be packaged as a standalone Windows application** so you can run it without installing Python or the project dependencies separately.
 
-### Download the latest successful build
+### Download
 
-1. Open the [successful Build Windows EXE workflow run](https://github.com/Mahmoud976/Air_Slide/actions/runs/40710099443).
-2. Scroll to **Artifacts** and download **AirSlide-Windows**.
-3. Extract the downloaded ZIP and run `AirSlide.exe`.
+- **[GitHub Releases — permanent downloads](https://github.com/Mahmoud976/Air_Slide/releases/latest)** — use this page for versioned releases when one is published.
+- [GitHub Actions — latest build runs](https://github.com/Mahmoud976/Air_Slide/actions/workflows/build-windows-exe.yml) — the CI build artifact is temporary and expires after 14 days.
 
-[**Download page — AirSlide-Windows EXE artifact**](https://github.com/Mahmoud976/Air_Slide/actions/runs/40710099443)
+To download a successful Actions build:
+1. Open the workflow runs page above and select the latest successful **Build Windows EXE** run.
+2. Under **Artifacts**, download `AirSlide-Windows`.
+3. Extract the ZIP and run `AirSlide.exe`.
 
-> **Artifact availability:** GitHub keeps this build for 14 days, until **November 11, 2026**. It is a workflow artifact, not a permanent GitHub Release.
+> **Artifact vs. Release:** Actions artifacts are temporary CI outputs. A GitHub Release is the permanent, versioned download page. The release workflow is available under **Actions → Publish Windows Release**; run it with a version such as `v1.0.0` to build the EXE and attach it to a release.
 
 ### Build it yourself on Windows
 
 1. Install Python 3.11 and Git.
 2. Clone the repository and open its folder.
 3. Double-click `build_exe.bat`.
-4. After the build completes, run `dist\AirSlide.exe`.
+4. After the build completes, run `dist\\AirSlide.exe`.
 
-The first local build needs an internet connection to install dependencies. The current single-file executable is approximately **237 MiB** because it bundles Python, OpenCV, and MediaPipe; it is convenient to run but not yet small. First launch can take longer while the bundled files are unpacked. Windows Defender or other security software may inspect a newly built executable.
+The single-file executable is approximately **237 MiB** because it bundles Python, OpenCV, and MediaPipe. First launch can take longer while bundled files are unpacked. Windows Defender or other security software may inspect a newly built executable.
 
-**Before presenting:** Test the EXE with your webcam and a test slide deck. Keep the presentation window focused because AirSlide sends keyboard input to the active window. The GitHub build passed its dependency/import checks and packaging workflow, but should still be tested on the target PC.
+**Before presenting:** Test the EXE with your webcam and a test slide deck. Keep the presentation window focused because AirSlide sends keyboard input to the active window. CI confirms dependency/import checks and packaging; it does not replace a real webcam test on the target PC.
 
 ## Configuration
 
@@ -179,6 +181,7 @@ Run a test script from the project directory, for example:
 - [ ] Improve gesture recognition across hand orientations and lighting conditions.
 - [ ] Add configurable controls and sensitivity settings.
 - [x] Package a single-file Windows EXE with GitHub Actions.
+- [x] Add a workflow to publish versioned Windows releases with the EXE attached.
 
 ## Contributing
 
