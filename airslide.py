@@ -8,9 +8,9 @@ from collections import deque
 
 # ---------- Settings ----------
 CAMERA_INDEX = 0
-COOLDOWN = 1.2
-MOVEMENT_THRESHOLD = 0.12
-CALIBRATION_FRAMES = 8
+COOLDOWN = 0.65
+MOVEMENT_THRESHOLD = 0.075
+SMOOTHING_FRAMES = 5
 
 pyautogui.FAILSAFE = True
 pyautogui.PAUSE = 0.05
@@ -50,11 +50,15 @@ def main():
         print("ERROR: Could not open webcam.")
         return
 
-    last_x_positions = deque(maxlen=CALIBRATION_FRAMES)
+    # Smooth noisy wrist landmarks with a short median window. Unlike the
+    # previous long frame-history check, this can detect quick hand movements.
+    wrist_history = deque(maxlen=SMOOTHING_FRAMES)
+    anchor_x = None
     last_action_time = 0
     armed = True
     previous_gesture = None
     gesture_frames = 0
+    status = "SHOW YOUR HAND"
 
     print("AirSlide started.")
     print("Open palm: enable movement control.")
@@ -62,7 +66,6 @@ def main():
     print("Move your open hand LEFT or RIGHT to change slides.")
     print("Keep PowerPoint Slide Show active when testing.")
     print("Press Q or ESC to quit.")
-    print("Safety: no slide keys are sent until a movement is detected.")
 
     try:
         with mp_hands.Hands(
@@ -72,25 +75,22 @@ def main():
             min_detection_confidence=0.6,
             min_tracking_confidence=0.6
         ) as hands:
-
             while True:
                 ok, frame = camera.read()
                 if not ok:
                     print("ERROR: Could not read webcam.")
+                    status = "CAMERA FRAME UNAVAILABLE"
                     break
 
                 frame = cv2.flip(frame, 1)
                 rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 result = hands.process(rgb)
-
-                status = "SHOW YOUR HAND"
-                now = time.time()
+                now = time.monotonic()
+                movement_delta = 0.0
 
                 if result.multi_hand_landmarks:
                     hand = result.multi_hand_landmarks[0]
-                    mp_draw.draw_landmarks(
-                        frame, hand, mp_hands.HAND_CONNECTIONS
-                    )
+                    mp_draw.draw_landmarks(frame, hand, mp_hands.HAND_CONNECTIONS)
 
                     gesture = recognize_gesture(hand)
                     wrist_x = hand.landmark[0].x
@@ -101,61 +101,73 @@ def main():
                         previous_gesture = gesture
                         gesture_frames = 1
 
-                    # Require a stable gesture before changing mode
-                    if gesture_frames >= 5:
+                    if gesture_frames >= 4:
                         if gesture == "FIST":
                             armed = False
-                            last_x_positions.clear()
+                            anchor_x = None
+                            wrist_history.clear()
                             status = "PAUSED - OPEN PALM TO ENABLE"
 
                         elif gesture == "OPEN HAND":
                             if not armed:
                                 armed = True
-                                last_x_positions.clear()
+                                anchor_x = None
+                                wrist_history.clear()
                                 status = "CONTROL ENABLED - HOLD STILL"
                             else:
-                                status = "READY - MOVE LEFT OR RIGHT"
-                                last_x_positions.append(wrist_x)
+                                wrist_history.append(wrist_x)
+                                smoothed_x = sorted(wrist_history)[len(wrist_history) // 2]
 
-                                if len(last_x_positions) == CALIBRATION_FRAMES:
-                                    delta = last_x_positions[-1] - last_x_positions[0]
+                                if anchor_x is None and len(wrist_history) >= 3:
+                                    anchor_x = smoothed_x
+                                    status = "READY - MOVE LEFT OR RIGHT"
+                                elif anchor_x is not None:
+                                    movement_delta = smoothed_x - anchor_x
 
-                                    if now - last_action_time >= COOLDOWN:
-                                        if delta > MOVEMENT_THRESHOLD:
-                                            pyautogui.press("right")
-                                            status = "NEXT SLIDE"
+                                    if abs(movement_delta) >= MOVEMENT_THRESHOLD:
+                                        if now - last_action_time >= COOLDOWN:
+                                            direction = "right" if movement_delta > 0 else "left"
+                                            pyautogui.press(direction)
+                                            status = "NEXT SLIDE" if direction == "right" else "PREVIOUS SLIDE"
                                             last_action_time = now
-                                            last_x_positions.clear()
-
-                                        elif delta < -MOVEMENT_THRESHOLD:
-                                            pyautogui.press("left")
-                                            status = "PREVIOUS SLIDE"
-                                            last_action_time = now
-                                            last_x_positions.clear()
+                                            # One deliberate movement = one key press.
+                                            # Re-anchor so holding the hand in place
+                                            # does not repeatedly change slides.
+                                            anchor_x = smoothed_x
+                                        else:
+                                            status = "WAIT - COOLDOWN"
+                                    else:
+                                        status = "READY - MOVE LEFT OR RIGHT"
                         else:
-                            status = "OTHER GESTURE - HOLD OPEN PALM"
-
+                            anchor_x = None
+                            wrist_history.clear()
+                            status = "OTHER GESTURE - SHOW OPEN PALM"
                 else:
                     previous_gesture = None
                     gesture_frames = 0
-                    last_x_positions.clear()
+                    anchor_x = None
+                    wrist_history.clear()
+                    status = "SHOW YOUR HAND"
 
                 cv2.putText(
                     frame, status, (15, 35),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.65,
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.62,
                     (0, 255, 0), 2
                 )
-
                 mode = "ENABLED" if armed else "PAUSED"
                 cv2.putText(
-                    frame, f"Control: {mode}", (15, 70),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.65,
+                    frame, f"Control: {mode}", (15, 68),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.62,
                     (255, 200, 0), 2
+                )
+                cv2.putText(
+                    frame, f"Movement: {movement_delta:+.3f}", (15, 101),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.55,
+                    (255, 255, 255), 1
                 )
 
                 cv2.imshow("AirSlide Controller", frame)
-
-                key = cv2.waitKey(10)
+                key = cv2.waitKey(1)
                 if key != -1 and (key & 0xFF) in (ord("q"), 27):
                     break
 
