@@ -180,5 +180,5 @@ Suggestions, bug reports, and pull requests are welcome. For a useful bug report
 This project is licensed under the [MIT License](LICENSE).
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=rect&height=90&color=0:22D3EE,50:155E75,100:0F172A&section=footer&animation=fadeIn" width="100%" alt="Animated footer" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=140&color=0:0F172A,50:155E75,100:22D3EE&section=footer&animation=twinkling&reversal=true" width="100%" alt="Animated footer banner" />
 </p>
