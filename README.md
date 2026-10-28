@@ -117,11 +117,11 @@ A webcam window named **AirSlide Controller** should appear. Use an open palm to
 
 ### Download the latest successful build
 
-1. Open the [successful Build Windows EXE workflow run](https://github.com/Mahmoud976/Air_Slide/actions/runs/40706863322).
+1. Open the [successful Build Windows EXE workflow run](https://github.com/Mahmoud976/Air_Slide/actions/runs/40710099443).
 2. Scroll to **Artifacts** and download **AirSlide-Windows**.
 3. Extract the downloaded ZIP and run `AirSlide.exe`.
 
-[**Download page — AirSlide-Windows EXE artifact**](https://github.com/Mahmoud976/Air_Slide/actions/runs/40706863322)
+[**Download page — AirSlide-Windows EXE artifact**](https://github.com/Mahmoud976/Air_Slide/actions/runs/40710099443)
 
 > **Artifact availability:** GitHub keeps this build for 14 days, until **November 11, 2026**. It is a workflow artifact, not a permanent GitHub Release.
 
@@ -143,11 +143,11 @@ The main settings are near the top of airslide.py:
 | Setting | Default | Purpose |
 |---|---:|---|
 | CAMERA_INDEX | 0 | Webcam device index |
-| COOLDOWN | 0.65 seconds | Minimum time between slide actions |
-| MOVEMENT_THRESHOLD | 0.075 | Normalized horizontal movement needed to trigger navigation |
-| SMOOTHING_FRAMES | 5 frames | Short median window used to reduce tracking jitter |
+| COOLDOWN | 0.60 seconds | Minimum time between slide actions |
+| MOVEMENT_THRESHOLD | 0.065 | Normalized horizontal movement needed to trigger navigation |
+| SMOOTHING_FRAMES | 3 frames | Short median window used to reduce tracking jitter |
 
-If your webcam is not the default camera, try changing CAMERA_INDEX. If slides still do not change reliably, lower MOVEMENT_THRESHOLD slightly (for example, to 0.06); if accidental changes occur, raise it (for example, to 0.09). Use deliberate horizontal movements and keep your open palm visible to the camera.
+If your webcam is not the default camera, try changing CAMERA_INDEX. If slides still do not change reliably, lower MOVEMENT_THRESHOLD slightly for more sensitivity; if accidental changes occur, raise it. The current defaults use a 3-frame median and a 0.065 movement threshold for quicker response, with a short keyboard-action pause. Use deliberate horizontal movements and keep your open palm visible to the camera.
 
 ## Development and test scripts
 
