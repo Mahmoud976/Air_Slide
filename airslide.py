@@ -8,12 +8,12 @@ from collections import deque
 
 # ---------- Settings ----------
 CAMERA_INDEX = 0
-COOLDOWN = 0.65
-MOVEMENT_THRESHOLD = 0.075
-SMOOTHING_FRAMES = 5
+COOLDOWN = 0.60
+MOVEMENT_THRESHOLD = 0.065
+SMOOTHING_FRAMES = 3
 
 pyautogui.FAILSAFE = True
-pyautogui.PAUSE = 0.05
+pyautogui.PAUSE = 0.01
 
 mp_hands = mp.solutions.hands
 mp_draw = mp.solutions.drawing_utils
