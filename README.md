@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="#features">Features</a> · <a href="#how-it-works">How it works</a> · <a href="#getting-started">Get started</a> · <a href="#gesture-controls">Gestures</a>
+  <a href="#features">Features</a> · <a href="#how-it-works">How it works</a> · <a href="#getting-started">Get started</a> · <a href="#windows-exe">Windows EXE</a> · <a href="#gesture-controls">Gestures</a>
 </p>
 
 ---
@@ -174,7 +174,7 @@ Run a test script from the project directory, for example:
 - [ ] Add an optional calibration mode for different camera positions.
 - [ ] Improve gesture recognition across hand orientations and lighting conditions.
 - [ ] Add configurable controls and sensitivity settings.
-- [ ] Package the application for easier setup.
+- [x] Package a single-file Windows EXE with GitHub Actions.
 
 ## Contributing
 
