@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://readme-typing-svg.demolab.com">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=16&pause=900&color=22D3EE&center=true&vCenter=true&width=1200&lines=Control+your+presentation+with+hand+gestures+using+Python+and+computer+vision." alt="Control your presentation with hand gestures using Python and computer vision." />
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=19&pause=900&color=22D3EE&center=true&vCenter=true&width=1200&lines=Control+your+presentation+with+hand+gestures+using+Python+and+computer+vision." alt="Control your presentation with hand gestures using Python and computer vision." />
   </a>
 </p>
 
