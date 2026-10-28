@@ -159,9 +159,17 @@ Suggestions, bug reports, and pull requests are welcome. For a useful bug report
 
 ## Author
 
-**Mahmoud Mohammed El Sayed Saleh**
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=170&color=0:0F172A,50:155E75,100:22D3EE&section=header&text=AUTHOR&fontColor=FFFFFF&fontSize=42&fontAlignY=38&animation=fadeIn" width="100%" alt="Author banner" />
+</p>
 
-<p align="left">
+<p align="center">
+  <a href="https://readme-typing-svg.demolab.com">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26&pause=1000&color=22D3EE&center=true&vCenter=true&width=900&lines=Mahmoud+Mohammed+El+Sayed+Saleh" alt="Mahmoud Mohammed El Sayed Saleh" />
+  </a>
+</p>
+
+<p align="center">
   <a href="https://www.linkedin.com/in/mahmoud-m-saleh/">
     <img src="https://img.shields.io/badge/LinkedIn-Connect%20with%20Mahmoud-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="Connect with Mahmoud on LinkedIn" />
   </a>
